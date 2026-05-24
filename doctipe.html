@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>SEO Count | Contador de Caracteres e Palavras</title>
+    <meta name="description" content="Ferramenta gratuita para otimizar seus textos para SEO. Conte caracteres, palavras e veja os limites ideais para Google e LinkedIn.">
+    <meta name="keywords" content="contador de caracteres, contador de palavras, ferramenta seo, meta descrição, título seo, linkedin">
+    <meta name="author" content="SEO Count">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b2e 100%);
+            font-family: system-ui, -apple-system, 'Inter', 'Segoe UI', Roboto, sans-serif;
+            padding: 1.5rem;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Card principal */
+        .main-card {
+            background: #1e293b;
+            border-radius: 32px;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
+
+        /* Header */
+        .header {
+            padding: 2rem 2rem 0 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f8fafc, #94a3b8);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+            padding: 0.2rem 0.7rem;
+            border-radius: 999px;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Área de texto */
+        .textarea-section {
+            padding: 2rem;
+        }
+
+        .textarea-wrapper {
+            position: relative;
+        }
+
+        textarea {
+            width: 100%;
+            height: 240px;
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 20px;
+            padding: 1.2rem;
+            color: #f1f5f9;
+            font-size: 1rem;
+            line-height: 1.6;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            resize: vertical;
+            transition: all 0.2s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+        }
+
+        textarea::placeholder {
+            color: #475569;
+            font-family: system-ui, -apple-system, 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        .btn:hover {
+            background: #475569;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: #0284c7;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #38bdf8;
+        }
+
+        /* Grid de métricas */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            padding: 0 2rem 1.5rem 2rem;
+        }
+
+        .metric-card {
+            background: #0f172a;
+            border-radius: 20px;
+            padding: 1.2rem 0.8rem;
+            text-align: center;
+            border: 1px solid #334155;
+            transition: all 0.2s ease;
+        }
+
+        .metric-card:hover {
+            border-color: #475569;
+            transform: translateY(-2px);
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #38bdf8;
+            line-height: 1.2;
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #94a3b8;
+            margin-top: 0.3rem;
+        }
+
+        /* Seção SEO */
+        .seo-section {
+            padding: 0 2rem 2rem 2rem;
+        }
+
+        .seo-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .seo-card {
+            background: #0f172a;
+            border-radius: 20px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            border-left: 5px solid #475569;
+            transition: all 0.2s ease;
+        }
+
+        .seo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+
+        .seo-name {
+            font-weight: 700;
+            color: #f1f5f9;
+            font-size: 1rem;
+        }
+
+        .seo-name small {
+            font-weight: 400;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            margin-left: 0.5rem;
+        }
+
+        .seo-count {
+            font-family: monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            background: #1e293b;
+            color: #94a3b8;
+        }
+
+        /* Barra de progresso */
+        .progress-container {
+            margin: 0.7rem 0 0.5rem 0;
+        }
+
+        .progress-bar-bg {
+            background: #1e293b;
+            border-radius: 10px;
+            height: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.15s ease;
+            width: 0%;
+            background: #475569;
+        }
+
+        .seo-tip {
+            font-size: 0.7rem;
+            margin-top: 0.5rem;
+            color: #94a3b8;
+        }
+
+        /* Cores de status */
+        .seo-card.status-good { border-left-color: #22c55e; }
+        .status-good .progress-fill { background: #22c55e; }
+        .status-good .seo-count { color: #22c55e; }
+
+        .seo-card.status-warning { border-left-color: #eab308; }
+        .status-warning .progress-fill { background: #eab308; }
+        .status-warning .seo-count { color: #eab308; }
+
+        .seo-card.status-danger { border-left-color: #ef4444; }
+        .status-danger .progress-fill { background: #ef4444; }
+        .status-danger .seo-count { color: #ef4444; }
+
+        .seo-card.status-neutral { border-left-color: #475569; }
+        .status-neutral .progress-fill { background: #475569; }
+        .status-neutral .seo-count { color: #94a3b8; }
+
+        /* Toast de notificação */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #22c55e;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.7rem;
+            color: #475569;
+            border-top: 1px solid #334155;
+        }
+
+        /* Responsivo */
+        @media (max-width: 600px) {
+            body { padding: 0.75rem; }
+            .header { padding: 1.5rem 1rem 0 1rem; }
+            .header h1 { font-size: 1.4rem; }
+            .textarea-section { padding: 1rem; }
+            .metrics-grid { 
+                padding: 0 1rem 1rem 1rem; 
+                gap: 0.75rem;
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .metric-value { font-size: 1.4rem; }
+            .seo-section { padding: 0 1rem 1rem 1rem; }
+            .seo-header { flex-direction: column; gap: 0.5rem; }
+            .button-group { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="main-card">
+        <div class="header">
+            <h1>SEO Count <span class="badge">SEO-Driven</span></h1>
+            <p class="subtitle">Análise de texto em tempo real. Monitore limites para Google, LinkedIn e mais.</p>
+        </div>
+
+        <div class="textarea-section">
+            <div class="textarea-wrapper">
+                <textarea id="textInput" placeholder="📝 Cole ou digite seu texto aqui...
+
+💡 Exemplo de título ideal: &quot;Como otimizar títulos SEO em 2025&quot; (53 caracteres)
+
+⚡ Conforme você digita, as métricas e a análise SEO atualizam automaticamente"></textarea>
+            </div>
+            <div class="button-group">
+                <button class="btn" id="clearBtn">🗑️ Limpar</button>
+                <button class="btn btn-primary" id="copyBtn">📋 Copiar texto</button>
+            </div>
+        </div>
+
+        <!-- Métricas principais -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value" id="charCount">0</div>
+                <div class="metric-label">Caracteres</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="charNoSpace">0</div>
+                <div class="metric-label">Caracteres sem espaços</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="wordCount">0</div>
+                <div class="metric-label">Palavras</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="paraCount">0</div>
+                <div class="metric-label">Parágrafos</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="readingTime">0 <span style="font-size:0.8rem;">min</span></div>
+                <div class="metric-label">Tempo de leitura</div>
+            </div>
+        </div>
+
+        <!-- Análise SEO -->
+        <div class="seo-section">
+            <div class="seo-title">
+                <span>🎯</span> Otimização para mecanismos e redes
+            </div>
+
+            <!-- Título Google -->
+            <div class="seo-card status-neutral" id="seoTitleCard">
+                <div class="seo-header">
+                    <div class="seo-name">
+                        🔖 Título Google (Title Tag)
+                        <small>ideal: 50-60 caracteres</small>
+                    </div>
+                    <div class="seo-count" id="seoTitleCount">0 / 60</div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar-bg">
+                        <div class="progress-fill" id="titleProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="seo-tip" id="titleTip">✨ Digite seu título aqui para análise</div>
+            </div>
+
+            <!-- Meta Description -->
+            <div class="seo-card status-neutral" id="seoDescCard">
+                <div class="seo-header">
+                    <div class="seo-name">
+                        📄 Meta Description Google
+                        <small>ideal: 150-160 caracteres</small>
+                    </div>
+                    <div class="seo-count" id="seoDescCount">0 / 160</div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar-bg">
+                        <div class="progress-fill" id="descProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="seo-tip" id="descTip">✨ Digite sua meta descrição aqui para análise</div>
+            </div>
+
+            <!-- LinkedIn -->
+            <div class="seo-card status-neutral" id="seoLinkedinCard">
+                <div class="seo-header">
+                    <div class="seo-name">
+                        💼 LinkedIn (feed)
+                        <small>ideal: até 140 caracteres (evita corte)</small>
+                    </div>
+                    <div class="seo-count" id="seoLinkedinCount">0 / 140</div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar-bg">
+                        <div class="progress-fill" id="linkedinProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="seo-tip" id="linkedinTip">✨ Digite seu texto para LinkedIn aqui para análise</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            🔒 100% privado · Nada é salvo no servidor · Ferramenta gratuita
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast">✅ Texto copiado!</div>
+
+<script>
+    (function() {
+        // Elementos
+        const textarea = document.getElementById('textInput');
+        
+        // Métricas
+        const charCountEl = document.getElementById('charCount');
+        const charNoSpaceEl = document.getElementById('charNoSpace');
+        const wordCountEl = document.getElementById('wordCount');
+        const paraCountEl = document.getElementById('paraCount');
+        const readingTimeEl = document.getElementById('readingTime');
+        
+        // SEO elementos
+        const seoTitleCard = document.getElementById('seoTitleCard');
+        const seoTitleCount = document.getElementById('seoTitleCount');
+        const titleProgress = document.getElementById('titleProgress');
+        const titleTip = document.getElementById('titleTip');
+        
+        const seoDescCard = document.getElementById('seoDescCard');
+        const seoDescCount = document.getElementById('seoDescCount');
+        const descProgress = document.getElementById('descProgress');
+        const descTip = document.getElementById('descTip');
+        
+        const seoLinkedinCard = document.getElementById('seoLinkedinCard');
+        const seoLinkedinCount = document.getElementById('seoLinkedinCount');
+        const linkedinProgress = document.getElementById('linkedinProgress');
+        const linkedinTip = document.getElementById('linkedinTip');
+        
+        // Toast
+        const toast = document.getElementById('toast');
+        
+        function showToast(message) {
+            toast.textContent = message || '✅ Texto copiado!';
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+        
+        function updateCardStatus(card, length, minIdeal, maxIdeal, maxLimit, progressEl, countEl, tipEl, labelName) {
+            // Remove classes anteriores
+            card.classList.remove('status-good', 'status-warning', 'status-danger', 'status-neutral');
+            
+            let percent = Math.min(100, (length / maxLimit) * 100);
+            progressEl.style.width = `${percent}%`;
+            countEl.textContent = `${length} / ${maxLimit}`;
+            
+            if (length === 0) {
+                card.classList.add('status-neutral');
+                tipEl.innerHTML = `✨ Digite algo para analisar o ${labelName}`;
+                return;
+            }
+            
+            if (length >= minIdeal && length <= maxIdeal) {
+                card.classList.add('status-good');
+                if (length === maxIdeal) {
+                    tipEl.innerHTML = `🎯 Perfeito! ${length} caracteres exatos. Dentro do ideal (${minIdeal}-${maxIdeal}).`;
+                } else {
+                    tipEl.innerHTML = `✅ Ótimo! ${length} caracteres. Dentro do ideal (${minIdeal}-${maxIdeal}).`;
+                }
+            } 
+            else if (length < minIdeal) {
+                card.classList.add('status-warning');
+                const falta = minIdeal - length;
+                tipEl.innerHTML = `⚠️ Abaixo do ideal. Faltam ${falta} caracteres para atingir ${minIdeal}.`;
+            } 
+            else if (length > maxIdeal) {
+                card.classList.add('status-danger');
+                const excesso = length - maxIdeal;
+                tipEl.innerHTML = `❌ Acima do recomendado! ${excesso} caracter${excesso === 1 ? 'er' : 'es'} além do limite de ${maxIdeal}. O Google pode truncar seu texto.`;
+            }
+        }
+        
+        function updateAll() {
+            const text = textarea.value;
+            const totalChars = text.length;
+            
+            // 1. Métricas básicas
+            charCountEl.textContent = totalChars.toLocaleString();
+            
+            // Caracteres sem espaços
+            const charsNoSpace = text.replace(/\s/g, '').length;
+            charNoSpaceEl.textContent = charsNoSpace.toLocaleString();
+            
+            // Palavras
+            const words = text.trim() === '' ? [] : text.trim().split(/\s+/);
+            const wordCount = words.length;
+            wordCountEl.textContent = wordCount.toLocaleString();
+            
+            // Parágrafos (linhas em branco separam parágrafos)
+            const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+            paraCountEl.textContent = paragraphs.length;
+            
+            // Tempo de leitura (200 palavras por minuto)
+            const readingMinutes = wordCount === 0 ? 0 : Math.max(1, Math.ceil(wordCount / 200));
+            if (readingMinutes === 0) {
+                readingTimeEl.innerHTML = `0 <span style="font-size:0.8rem;">min</span>`;
+            } else {
+                readingTimeEl.innerHTML = `${readingMinutes} <span style="font-size:0.8rem;">min</span>`;
+            }
+            
+            // 2. SEO - Título (50-60 ideal, máximo 60)
+            updateCardStatus(
+                seoTitleCard, totalChars, 50, 60, 60,
+                titleProgress, seoTitleCount, titleTip, "título"
+            );
+            
+            // 3. SEO - Meta Description (150-160 ideal, máximo 160)
+            updateCardStatus(
+                seoDescCard, totalChars, 150, 160, 160,
+                descProgress, seoDescCount, descTip, "meta descrição"
+            );
+            
+            // 4. SEO - LinkedIn (ideal até 140, máximo 140)
+            updateCardStatus(
+                seoLinkedinCard, totalChars, 1, 140, 140,
+                linkedinProgress, seoLinkedinCount, linkedinTip, "LinkedIn"
+            );
+        }
+        
+        // Eventos
+        textarea.addEventListener('input', updateAll);
+        
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            textarea.value = '';
+            updateAll();
+            textarea.focus();
+            showToast('🧹 Texto limpo');
+        });
+        
+        document.getElementById('copyBtn').addEventListener('click', async () => {
+            const text = textarea.value;
+            if (!text.trim()) {
+                showToast('⚠️ Nada para copiar. Digite algo primeiro.');
+                return;
+            }
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast('📋 Texto copiado com sucesso!');
+            } catch (err) {
+                showToast('❌ Não foi possível copiar. Selecione manualmente.');
+                // Fallback: seleciona o texto para o usuário
+                textarea.select();
+            }
+        });
+        
+        // Inicializa com campo vazio (tudo neutro/cinza)
+        textarea.value = '';
+        updateAll();
+    })();
+</script>
+</body>
+</html>
